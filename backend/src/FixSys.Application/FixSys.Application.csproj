@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <ProjectReference Include="..\FixSys.Domain\FixSys.Domain.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.*" />
+  </ItemGroup>
+</Project>

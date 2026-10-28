@@ -1,0 +1,566 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alexandria:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
+@import 'tailwindcss';
+@import './components/studio/studio.css';
+
+.version-switch { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; border: 1px solid var(--border); border-radius: 10px; padding: 9px 12px; color: var(--foreground); background: var(--secondary); font-size: 12px; font-weight: 600; cursor: pointer; }
+.version-switch > span:first-child { color: var(--primary); font-size: 18px; }
+.version-switch:hover { border-color: var(--primary); }
+
+html,
+body,
+#root {
+  height: 100%;
+  direction: rtl;
+}
+
+/* Suppress all transitions on first paint so the sidebar and main
+   content snap into their correct positions immediately. Removed
+   by React after the first render cycle completes. */
+body.preload * {
+  transition-duration: 0s !important;
+  animation-duration: 0s !important;
+}
+
+/* ── Day (light) theme — derived from the Inventory Management design ── */
+:root {
+  --background: #dce9ee;
+  --foreground: #1e3a47;
+  --card: #ffffff;
+  --card-foreground: #1e3a47;
+  --primary: #46738a;
+  --primary-foreground: #ffffff;
+  --secondary: #e0ebef;
+  --secondary-foreground: #3c5a68;
+  --muted: #edf3f5;
+  --muted-foreground: #607d8b;
+  --accent: #2f97b8;
+  --accent-foreground: #ffffff;
+  --border: #dae6eb;
+  --ring: #46738a;
+
+  --sidebar-bg:
+    repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(255,255,255,0.02) 31px, rgba(255,255,255,0.02) 32px),
+    repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(255,255,255,0.02) 31px, rgba(255,255,255,0.02) 32px),
+    radial-gradient(ellipse 160% 65% at 118% 5%, rgba(47,151,184,0.22) 0%, transparent 48%),
+    radial-gradient(ellipse 130% 55% at -18% 98%, rgba(70,115,138,0.28) 0%, transparent 48%),
+    linear-gradient(170deg, #334f5f 0%, #243f4d 55%, #1d3540 100%);
+  --sidebar-active: #efeadd;
+  --sidebar-active-text: #234754;
+  --sidebar-active-border: #efeadd;
+  --scrollbar-thumb: #b6ccd4;
+  --scrollbar-thumb-hover: #9bb8c2;
+  --card-shadow: 0 0 0 1px rgba(255,255,255,0.88) inset, 0 2px 4px rgb(30 58 71 / 0.04), 0 8px 32px rgb(30 58 71 / 0.1);
+  --header-shadow: 0 1px 0 rgba(255,255,255,0.55) inset, 0 4px 20px rgb(30 58 71 / 0.06);
+  --divider: #d3e1e7;
+
+  /* status badge tints (bg + text tuned for a light surface) */
+  --badge-success-text: #047857;
+  --badge-info-text: #0369a1;
+  --badge-warning-text: #b45309;
+  --badge-danger-text: #be123c;
+  --badge-neutral-bg: #e2e8f0;
+  --badge-neutral-text: #475569;
+  --badge-neutral-border: rgb(100 116 139 / 0.25);
+}
+
+/* ── Night (dark) theme — the original AutoServe look ── */
+.dark {
+  --background: #0a0e1a;
+  --foreground: #e8eaf0;
+  --card: #111827;
+  --card-foreground: #e8eaf0;
+  --primary: #f59e0b;
+  --primary-foreground: #0a0e1a;
+  --secondary: #1e293b;
+  --secondary-foreground: #94a3b8;
+  --muted: #1e293b;
+  --muted-foreground: #64748b;
+  --accent: #0ea5e9;
+  --accent-foreground: #ffffff;
+  --border: #1e293b;
+  --ring: #f59e0b;
+
+  --sidebar-bg:
+    repeating-linear-gradient(0deg, transparent, transparent 31px, rgba(255,255,255,0.016) 31px, rgba(255,255,255,0.016) 32px),
+    repeating-linear-gradient(90deg, transparent, transparent 31px, rgba(255,255,255,0.016) 31px, rgba(255,255,255,0.016) 32px),
+    radial-gradient(ellipse 160% 65% at 118% 5%, rgba(245,158,11,0.11) 0%, transparent 48%),
+    radial-gradient(ellipse 130% 55% at -18% 98%, rgba(14,165,233,0.08) 0%, transparent 48%),
+    linear-gradient(170deg, #0e1628 0%, #0a1020 55%, #070c17 100%);
+  --sidebar-active: rgb(245 158 11 / 0.18);
+  --sidebar-active-text: #fbbf24;
+  --sidebar-active-border: rgb(245 158 11 / 0.35);
+  --scrollbar-thumb: #1e293b;
+  --scrollbar-thumb-hover: #334155;
+  --card-shadow: none;
+  --header-shadow: 0 1px 0 rgba(255,255,255,0.04) inset, 0 4px 24px rgba(0,0,0,0.3);
+  --divider: #1e293b;
+
+  --badge-success-text: #34d399;
+  --badge-info-text: #38bdf8;
+  --badge-warning-text: #fbbf24;
+  --badge-danger-text: #fb7185;
+  --badge-neutral-bg: rgb(51 65 85 / 0.5);
+  --badge-neutral-text: #94a3b8;
+  --badge-neutral-border: rgb(71 85 105 / 0.3);
+}
+
+/* ── Sidebar sliding "curved active tab" (RTL) ──────────────────────────
+   A SINGLE indicator element (not per-item) takes the main-content background
+   colour and sits flush against the sidebar's inner (left) edge so it reads as
+   part of the content. Its `top`/`height` are driven from JS to match the
+   active item, and it glides between items via the transition below. Two
+   pseudo-elements draw inverted-radius fillets above & below, carving the dark
+   sidebar into a smooth concave curve at the junction — the fillets travel
+   along with the tab as it slides. */
+.sidebar-tab-indicator {
+  position: absolute;
+  left: -12px; /* escape the nav's 12px left padding to reach the content edge */
+  width: calc(100% + 12px);
+  background: var(--background);
+  border-radius: 0 9999px 9999px 0; /* rounded (pill) on the right, flush (straight) on the left */
+  z-index: 0; /* behind the button labels (z-10), above the sidebar bg */
+  pointer-events: none;
+  transition:
+    top 0.42s cubic-bezier(0.34, 1.2, 0.44, 1),
+    height 0.42s cubic-bezier(0.34, 1.2, 0.44, 1);
+}
+.sidebar-tab-indicator::before,
+.sidebar-tab-indicator::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+}
+/* radial-gradient carves a perfectly smooth inverted (concave) corner —
+   transparent inside the arc, content colour outside. Element size == radius so
+   the arc runs tangent into the left wall with no leftover lip. The .5px
+   feather kills anti-alias jaggies. */
+.sidebar-tab-indicator::before {
+  top: -40px;
+  background: radial-gradient(circle at 100% 0, transparent 40px, var(--background) 40.5px);
+}
+.sidebar-tab-indicator::after {
+  bottom: -40px;
+  background: radial-gradient(circle at 100% 100%, transparent 40px, var(--background) 40.5px);
+}
+
+/* ── Sidebar glider glow — sliding light bar ────────────────────────────────
+   A 1px vertical line at the sidebar's right (outer) edge slides to the
+   active nav item. ::before blurs a small halo outward; ::after fans a wide
+   gradient leftward across the nav items — same approach as the poda radio
+   reference but adapted to variable-height items via absolute top/height. */
+.sidebar-glider-container {
+  position: absolute;
+  right: 3px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sidebar-glider {
+  position: absolute;
+  right: 0;
+  width: 3px;
+  border-radius: 9999px;
+  background: linear-gradient(
+    0deg,
+    transparent 0%,
+    var(--primary) 25%,
+    color-mix(in srgb, var(--primary) 40%, white) 50%,
+    var(--primary) 75%,
+    transparent 100%
+  );
+  box-shadow: 0 0 6px 0 color-mix(in srgb, var(--primary) 70%, transparent);
+  transition:
+    top 0.5s cubic-bezier(0.37, 1.95, 0.66, 0.56),
+    height 0.42s cubic-bezier(0.34, 1.2, 0.44, 1);
+}
+
+.sidebar-glider::before {
+  content: "";
+  position: absolute;
+  right: -2px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 55%;
+  width: 12px;
+  background: var(--primary);
+  filter: blur(6px);
+  opacity: 0.5;
+}
+
+.sidebar-glider::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 100%;
+  width: 90px;
+  background: linear-gradient(
+    270deg,
+    color-mix(in srgb, var(--primary) 16%, transparent) 0%,
+    transparent 100%
+  );
+}
+
+/* Collapsed (72px) rail: keep only a thin edge line + tiny halo so the glow
+   accents the right wall instead of blooming over the centered icon. */
+.sidebar-glider-container.is-collapsed .sidebar-glider::before {
+  width: 14px;
+  filter: blur(6px);
+  opacity: 0.45;
+}
+.sidebar-glider-container.is-collapsed .sidebar-glider::after {
+  width: 40px;
+}
+
+/* ── Multi-layer rotating conic-gradient glow search ────────────────────────
+   Four absolutely-positioned div layers (glow-layer, glow-darkBorderBg,
+   glow-white, glow-border) sit behind the real input. Each contains a
+   600×600 conic-gradient rotated via transform on hover / focus-within.
+
+   Colors map to project vars:
+     primary  → teal  (light) / amber (dark)
+     accent   → cyan  (light) / sky   (dark)
+
+   .glow-search-poda                → pill (TopHeader)
+   .glow-search-poda.glow-search-box → rounded-xl (page SearchBox)      */
+
+.glow-search-poda {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+}
+
+/* Shared base for all 4 conic layers */
+.glow-search-poda > .glow-layer,
+.glow-search-poda > .glow-white,
+.glow-search-poda > .glow-border,
+.glow-search-poda > .glow-darkBorderBg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+
+/* ① Ambient glow — wide blurred halo */
+.glow-search-poda > .glow-layer {
+  filter: blur(18px);
+  opacity: 0.35;
+  inset: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+}
+.glow-search-poda > .glow-layer::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(60deg);
+  width: 600px; height: 600px;
+  background-image: conic-gradient(
+    rgba(0,0,0,0),
+    var(--primary) 10%,
+    rgba(0,0,0,0) 35%,
+    rgba(0,0,0,0) 50%,
+    var(--accent)  60%,
+    color-mix(in srgb, var(--accent) 80%, transparent) 75%,
+    rgba(0,0,0,0) 90%
+  );
+  transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ② Dark border background */
+.glow-search-poda > .glow-darkBorderBg {
+  filter: blur(3px);
+}
+.glow-search-poda > .glow-darkBorderBg::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(82deg);
+  width: 600px; height: 600px;
+  background-image: conic-gradient(
+    rgba(0,0,0,0),
+    var(--primary),
+    rgba(0,0,0,0) 12%,
+    rgba(0,0,0,0) 50%,
+    color-mix(in srgb, var(--primary) 55%, var(--accent)),
+    rgba(0,0,0,0) 62%
+  );
+  transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ③ Bright soft conic — creates the luminous highlight */
+.glow-search-poda > .glow-white {
+  filter: blur(1.5px);
+  opacity: 0.6;
+}
+.glow-search-poda > .glow-white::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(83deg);
+  width: 600px; height: 600px;
+  filter: brightness(1.4);
+  background-image: conic-gradient(
+    rgba(0,0,0,0) 0%,
+    color-mix(in srgb, var(--primary) 60%, white),
+    rgba(0,0,0,0) 8%,
+    rgba(0,0,0,0) 50%,
+    var(--accent),
+    rgba(0,0,0,0) 58%
+  );
+  transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ④ Sharp visible border ring */
+.glow-search-poda > .glow-border {
+  filter: blur(0.5px);
+}
+.glow-search-poda > .glow-border::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(70deg);
+  width: 600px; height: 600px;
+  filter: brightness(1.3);
+  background-image: conic-gradient(
+    color-mix(in srgb, var(--background) 82%, transparent),
+    var(--primary)  8%,
+    color-mix(in srgb, var(--background) 82%, transparent) 18%,
+    color-mix(in srgb, var(--background) 82%, transparent) 50%,
+    var(--accent)   60%,
+    color-mix(in srgb, var(--accent) 80%, transparent) 70%,
+    color-mix(in srgb, var(--background) 82%, transparent) 80%
+  );
+  transition: transform 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ── Hover: sweep ~180° ───────────────────────────────────────────────────── */
+.glow-search-poda:hover > .glow-darkBorderBg::before { transform: translate(-50%, -50%) rotate(262deg); }
+.glow-search-poda:hover > .glow-layer::before        { transform: translate(-50%, -50%) rotate(240deg); opacity: 0.7; }
+.glow-search-poda:hover > .glow-white::before        { transform: translate(-50%, -50%) rotate(263deg); }
+.glow-search-poda:hover > .glow-border::before       { transform: translate(-50%, -50%) rotate(250deg); }
+
+/* ── Focus: full 360° spin ───────────────────────────────────────────────── */
+.glow-search-poda:focus-within > .glow-darkBorderBg::before { transform: translate(-50%, -50%) rotate(442deg); transition: transform 3.5s cubic-bezier(0.25, 1, 0.5, 1); }
+.glow-search-poda:focus-within > .glow-layer::before        { transform: translate(-50%, -50%) rotate(420deg); opacity: 0.8; transition: transform 3.5s cubic-bezier(0.25, 1, 0.5, 1); }
+.glow-search-poda:focus-within > .glow-white::before        { transform: translate(-50%, -50%) rotate(443deg); transition: transform 3.5s cubic-bezier(0.25, 1, 0.5, 1); }
+.glow-search-poda:focus-within > .glow-border::before       { transform: translate(-50%, -50%) rotate(430deg); transition: transform 3.5s cubic-bezier(0.25, 1, 0.5, 1); }
+
+/* ── Input container + input ─────────────────────────────────────────────── */
+.glow-search-main {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.glow-search-input {
+  width: 100%;
+  height: 40px;
+  background-color: var(--secondary);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  color: var(--foreground);
+  padding: 0 2.75rem 0 1rem;
+  font-size: 0.8125rem;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.glow-search-input::placeholder { color: var(--muted-foreground); }
+
+.glow-search-poda:hover  .glow-search-input,
+.glow-search-poda:focus-within .glow-search-input {
+  background-color: color-mix(in srgb, var(--secondary) 55%, var(--muted) 45%);
+  border-color: transparent;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+}
+
+/* Accent blob that fades out on hover (adapted from pink-mask) */
+.glow-search-accent-spot {
+  pointer-events: none;
+  width: 36px;
+  height: 20px;
+  position: absolute;
+  background: var(--primary);
+  top: 10px;
+  right: 12px;
+  filter: blur(14px);
+  opacity: 0.4;
+  transition: opacity 1.2s ease;
+  z-index: 2;
+}
+.glow-search-poda:hover .glow-search-accent-spot,
+.glow-search-poda:focus-within .glow-search-accent-spot { opacity: 0; }
+
+/* Rounded-xl variant used in page-level SearchBox */
+.glow-search-box > .glow-layer,
+.glow-search-box > .glow-darkBorderBg,
+.glow-search-box > .glow-white,
+.glow-search-box > .glow-border { border-radius: 12px; }
+.glow-search-box .glow-search-input {
+  border-radius: 12px;
+  height: 44px;
+  padding: 0 2.75rem 0 1rem;
+}
+
+/* ── Page transition ─────────────────────────────────────────────────────── */
+@keyframes pageEnter {
+  from { opacity: 0; transform: translateY(7px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.page-enter {
+  animation: pageEnter 0.22s ease-out both;
+}
+
+/* ── Toast slide-in ──────────────────────────────────────────────────────── */
+@keyframes slideInToast {
+  from { opacity: 0; transform: translateX(-16px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Chart bar gradients (theme-aware via CSS vars) ──────────────────────── */
+.chart-bar-primary {
+  background: linear-gradient(to top,
+    color-mix(in srgb, var(--primary) 28%, transparent),
+    color-mix(in srgb, var(--primary) 95%, transparent)
+  );
+}
+.chart-bar-primary:hover,
+.group\/bar:hover .chart-bar-primary {
+  filter: brightness(1.18);
+}
+.chart-bar-accent {
+  background: linear-gradient(to top,
+    color-mix(in srgb, var(--accent) 28%, transparent),
+    color-mix(in srgb, var(--accent) 95%, transparent)
+  );
+}
+.chart-bar-accent:hover,
+.group\/bar:hover .chart-bar-accent {
+  filter: brightness(1.18);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+  --radius: 0.75rem;
+  --font-sans: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Dark mode: paint a rich ambient gradient on the body so it bleeds through
+   the transparent root div and gives the page a dimensional glow. */
+.dark body {
+  background:
+    radial-gradient(ellipse 72% 52% at 66% 10%, rgba(245,158,11,0.07) 0%, transparent 54%),
+    radial-gradient(ellipse 52% 38% at 10% 80%, rgba(14,165,233,0.055) 0%, transparent 52%),
+    radial-gradient(ellipse 38% 30% at 88% 88%, rgba(139,92,246,0.04) 0%, transparent 46%),
+    var(--color-background);
+}
+
+/* ── Glass cards ──────────────────────────────────────────────────────────
+   Light mode: frosted white over the teal background.
+   Dark mode:  layered translucent panel with depth shadow + inner highlight. */
+:where(.bg-card) {
+  background: rgba(255,255,255,0.62) !important;
+  backdrop-filter: blur(20px) saturate(170%);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  border-color: rgba(255,255,255,0.82) !important;
+  box-shadow: var(--card-shadow);
+}
+
+.dark :where(.bg-card) {
+  background: linear-gradient(145deg, rgba(22,34,58,0.82) 0%, rgba(11,18,36,0.88) 100%) !important;
+  backdrop-filter: blur(16px) saturate(145%);
+  -webkit-backdrop-filter: blur(16px) saturate(145%);
+  border-color: rgba(255,255,255,0.07) !important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.055) inset,
+    0 1px 0 rgba(255,255,255,0.05) inset,
+    0 4px 8px rgba(0,0,0,0.32),
+    0 16px 52px rgba(0,0,0,0.44);
+}
+
+/* ── Status badge semantic colors (theme-aware) ── */
+.badge-success {
+  background: rgb(16 185 129 / 0.15);
+  color: var(--badge-success-text);
+  border-color: rgb(16 185 129 / 0.3);
+}
+.badge-info {
+  background: rgb(14 165 233 / 0.15);
+  color: var(--badge-info-text);
+  border-color: rgb(14 165 233 / 0.3);
+}
+.badge-warning {
+  background: rgb(245 158 11 / 0.15);
+  color: var(--badge-warning-text);
+  border-color: rgb(245 158 11 / 0.3);
+}
+.badge-danger {
+  background: rgb(244 63 94 / 0.15);
+  color: var(--badge-danger-text);
+  border-color: rgb(244 63 94 / 0.3);
+}
+.badge-neutral {
+  background: var(--badge-neutral-bg);
+  color: var(--badge-neutral-text);
+  border-color: var(--badge-neutral-border);
+}
+
+/* Hide the scrollbar (and reclaim its gutter) while keeping scroll working —
+   used on the sidebar nav so the active tab stays flush to the content edge. */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* Edge / IE */
+  scrollbar-width: none; /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome / Safari / Opera */
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}

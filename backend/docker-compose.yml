@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: fixsys
+      POSTGRES_USER: fixsys
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-fixsys_dev}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fixsys"]
+      interval: 5s
+      retries: 10
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Development}
+      ConnectionStrings__Default: Host=db;Database=fixsys;Username=fixsys;Password=${DB_PASSWORD:-fixsys_dev}
+      Jwt__Key: ${JWT_KEY:-dev-only-key-change-me-0123456789-abcdefghijklmnopqrstuvwxyz}
+      Database__AutoMigrate: "true"
+      Trials__Enabled: ${TRIALS_ENABLED:-false}
+      Trials__Days: ${TRIAL_DAYS:-7}
+      Trials__MaxActive: ${TRIAL_MAX_ACTIVE:-50}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      Telegram__SimulationEnabled: ${TELEGRAM_SIMULATION_ENABLED:-false}
+      Telegram__StatePath: /app/data/telegram.json
+      Seed__AdminEmail: ${SEED_ADMIN_EMAIL:-}
+      Seed__AdminPassword: ${SEED_ADMIN_PASSWORD:-}
+      Cors__Origins__0: ${FRONTEND_ORIGIN:-http://localhost:5173}
+      Cors__Origins__1: http://localhost:8443
+      Cors__Origins__2: http://localhost:5173
+    ports:
+      - "8080:8080"
+    volumes:
+      - telegramdata:/app/data
+
+volumes:
+  pgdata:
+  telegramdata:
