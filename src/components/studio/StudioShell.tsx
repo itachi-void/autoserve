@@ -4,6 +4,7 @@ import type { PageKey } from "../../App";
 import { useAuth } from "../../data/AuthContext";
 import { useAppData } from "../../data/AppDataContext";
 import { useTheme } from "../../data/ThemeContext";
+import { LogoOrbital } from "../logos/AutoServeLogo";
 
 const modules: { key: PageKey; label: string; icon: LucideIcon }[] = [
   { key: "dashboard", label: "غرفة التحكم", icon: LayoutGrid },
@@ -53,7 +54,7 @@ export default function StudioShell({ activePage, onNavigate, children }: { acti
   return (
     <div className={`studio-experience cockpit-shell ${isDark ? "cockpit-dark" : "cockpit-light"} ${railExpanded ? "nav-expanded" : "nav-collapsed"}`} dir="rtl">
       <aside className="cockpit-rail" aria-label="وحدات النظام">
-        <button className="cockpit-brand" onClick={() => onNavigate("dashboard")} aria-label="AutoServe الرئيسية"><Wrench size={23} /></button>
+        <button className="cockpit-brand" onClick={() => onNavigate("dashboard")} aria-label="AutoServe الرئيسية"><LogoOrbital size={27} lightMode={!isDark} badgeMode /></button>
         <div className="rail-divider" />
         <button className="rail-expand" aria-expanded={railExpanded} aria-label={railExpanded ? "طي قائمة التنقل" : "توسيع قائمة التنقل"} onClick={() => { const next = !railExpanded; setRailExpanded(next); localStorage.setItem("autoserve-nav-collapsed", String(!next)); }}><LayoutGrid size={17} /><span>{railExpanded ? "طي القائمة" : "القائمة"}</span></button>
         <nav>{[{ label: "مساحة العمل", keys: ["dashboard"] }, { label: "التشغيل", keys: ["work-orders", "appointments", "inspections", "technicians", "services"] }, { label: "العملاء", keys: ["customers", "cars", "quotations"] }, { label: "المالية والمخزون", keys: ["invoices", "spare-parts", "warehouse", "purchase-orders"] }, { label: "الإدارة", keys: ["employees", "permissions"] }].map(group => <div className="rail-group" key={group.label}><h2>{group.label}</h2>{modules.filter(module => group.keys.includes(module.key)).map(({ key, label, icon: Icon }) => <button key={key} aria-label={label} title={railExpanded ? undefined : label} aria-current={activePage === key ? "page" : undefined} className={activePage === key ? "active" : ""} onClick={() => onNavigate(key)}><Icon size={19} strokeWidth={1.6} /><span className="rail-label">{label}</span>{!railExpanded && <span className="rail-tooltip">{label}</span>}</button>)}</div>)}</nav>

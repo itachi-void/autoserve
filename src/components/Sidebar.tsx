@@ -2,6 +2,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import type { PageKey } from "../App";
 import { useAppData } from "../data/AppDataContext";
 import { useAuth } from "../data/AuthContext";
+import { LogoOrbital } from "./logos/AutoServeLogo";
 
 interface NavItem {
   key: PageKey;
@@ -103,7 +104,7 @@ export default function Sidebar({ activePage, setActivePage, open, setOpen, noTr
           <>
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg flex-shrink-0">
-                A
+                <LogoOrbital size={24} badgeMode />
               </div>
               <div>
                 <div className="font-bold text-white text-sm leading-tight">AutoServe</div>
@@ -119,7 +120,7 @@ export default function Sidebar({ activePage, setActivePage, open, setOpen, noTr
           </>
         ) : (
           <button onClick={() => setOpen(true)} className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center text-primary-foreground font-bold text-lg mx-auto">
-            A
+            <LogoOrbital size={24} badgeMode />
           </button>
         )}
       </div>

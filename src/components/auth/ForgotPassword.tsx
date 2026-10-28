@@ -4,6 +4,7 @@ import { useAuth } from "../../data/AuthContext";
 import { useTheme } from "../../data/ThemeContext";
 import { API_ENABLED } from "../../data/api";
 import FormField, { inputClass } from "../ui/FormField";
+import { LogoOrbital } from "../logos/AutoServeLogo";
 import "./login.css";
 
 interface Props { onBack: () => void; }
@@ -42,7 +43,7 @@ export default function ForgotPassword({ onBack }: Props) {
   }
   const stepIndex = ["email", "otp", "done"].indexOf(step);
   return <div className="studio-login" dir="rtl">
-    <header className="login-header"><button onClick={onBack} className="login-wordmark" aria-label="AutoServe — العودة لتسجيل الدخول"><span>auto<span>serve</span></span><small>WORKSHOP OS</small></button><span className="login-header-label">مساحة عملك، في أمان.</span><button className="login-theme" onClick={toggleTheme} aria-label={theme === "dark" ? "تفعيل الوضع النهاري" : "تفعيل الوضع الليلي"}>{theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}{theme === "dark" ? "الوضع النهاري" : "الوضع الليلي"}</button></header>
+    <header className="login-header"><button onClick={onBack} className="login-wordmark" aria-label="AutoServe — العودة لتسجيل الدخول"><LogoOrbital size={36} lightMode={theme !== "dark"} /><span>auto<span>serve</span></span><small>WORKSHOP OS</small></button><span className="login-header-label">مساحة عملك، في أمان.</span><button className="login-theme" onClick={toggleTheme} aria-label={theme === "dark" ? "تفعيل الوضع النهاري" : "تفعيل الوضع الليلي"}>{theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}{theme === "dark" ? "الوضع النهاري" : "الوضع الليلي"}</button></header>
     <main className="login-layout"><section className="login-showcase"><div className="login-kicker"><span /> WORKSPACE ACCESS <small>ACCOUNT RECOVERY</small></div><h1>ارجع لمساحتك.<br /><span>بخطوات واضحة.</span></h1><p className="login-intro">تحقق من بريدك، أنشئ كلمة مرور جديدة،<br />وكمّل يومك من المكان اللي وقفت فيه.</p><div className="login-vehicle-stage"><div className="login-stage-orbit" aria-hidden="true" /><div className="login-stage-light" aria-hidden="true" /><img className="login-vehicle" src="/images/studio-vehicle.webp" alt="سيارة فضية توضيحية في مساحة الصيانة" /><div className="login-vehicle-note"><span><ShieldCheck size={16} /> حسابك، تحت حمايتك</span><small>لا تشارك رمز التحقق مع أي شخص</small></div></div></section>
       <section className="login-access"><div className="login-panel"><div className="login-panel-top"><span>ACCOUNT RECOVERY</span><LockKeyhole size={25} /></div><ol className="recovery-steps" aria-label="خطوات استعادة الحساب">{["البريد", "التحقق", "جاهز"].map((label, index) => <li key={label} aria-current={index === stepIndex ? "step" : undefined} className={index <= stepIndex ? "active" : ""}><span>{index < stepIndex ? <Check size={13} /> : index + 1}</span>{label}</li>)}</ol><h2>{step === "email" ? "استعادة حسابك" : step === "otp" ? "كلمة مرور جديدة" : "حسابك جاهز للعودة"}</h2><p className="login-panel-description">{step === "email" ? "أدخل البريد المرتبط بحسابك لإرسال رمز التحقق." : step === "otp" ? "أدخل الرمز الذي وصلك واختر كلمة مرور جديدة." : "تم تحديث كلمة المرور. سجّل الدخول ببياناتك الجديدة."}</p>
       {error && <p className="login-error" role="alert">{error}</p>}{notice && <p className="recovery-notice" role="status">{notice}</p>}

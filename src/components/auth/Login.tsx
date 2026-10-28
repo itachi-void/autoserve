@@ -5,6 +5,7 @@ import { useTheme } from "../../data/ThemeContext";
 import { API_ENABLED, gql } from "../../data/api";
 import Modal from "../ui/Modal";
 import FormField, { inputClass } from "../ui/FormField";
+import { LogoOrbital } from "../logos/AutoServeLogo";
 import "./login.css";
 
 interface Props { onForgotPassword: () => void; }
@@ -71,7 +72,7 @@ export default function Login({ onForgotPassword }: Props) {
         </form>
       </Modal>
       <header className="login-header">
-        <div className="login-wordmark" aria-label="AutoServe"><span>auto<span>serve</span></span><small>WORKSHOP OS</small></div>
+        <div className="login-wordmark" aria-label="AutoServe"><LogoOrbital size={36} lightMode={theme !== "dark"} /><span>auto<span>serve</span></span><small>WORKSHOP OS</small></div>
         <span className="login-header-label">مصمم لورش تتحرك للأمام.</span>
         <button className="login-theme" onClick={toggleTheme} aria-label={theme === "dark" ? "تفعيل الوضع النهاري" : "تفعيل الوضع الليلي"}>{theme === "dark" ? <Sun size={17} /> : <Moon size={17} />}<span>{theme === "dark" ? "الوضع النهاري" : "الوضع الليلي"}</span></button>
       </header>

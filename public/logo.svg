@@ -1,0 +1,9 @@
+<svg width="240" height="64" viewBox="0 0 240 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="16" fill="#171817"/>
+  <path d="M 11 43 C 11 25, 24 13, 39 13 C 47 13, 52 16, 55 21" stroke="#b6cec5" stroke-width="2.5" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 16 51 L 29.6 15 C 30.4 13 33.6 13 34.4 15 L 48 51 L 40.8 51 L 32 26 L 23.2 51 Z" fill="#eeeae1"/>
+  <path d="M 20 39.5 L 43.5 32.5" stroke="#fa9c61" stroke-width="4.2" stroke-linecap="round"/>
+  <circle cx="50.5" cy="28.5" r="3.8" fill="#fa9c61"/>
+  <text x="80" y="37" font-family="Outfit, system-ui, sans-serif" font-size="31" font-weight="500" letter-spacing="-1" fill="#eeeae1">auto<tspan font-weight="300" fill="#b4b69f">serve</tspan></text>
+  <text x="82" y="52" font-family="JetBrains Mono, monospace" font-size="8" letter-spacing="2.8" fill="#aaa99d">WORKSHOP OS</text>
+</svg>
