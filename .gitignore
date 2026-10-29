@@ -27,3 +27,5 @@ obj/
 .vs/
 **/data/telegram.json*
 backend/telegram.local.env
+dist-apk/
+dist-windows/
