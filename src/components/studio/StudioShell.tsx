@@ -5,6 +5,7 @@ import { useAuth } from "../../data/AuthContext";
 import { useAppData } from "../../data/AppDataContext";
 import { useTheme } from "../../data/ThemeContext";
 import { LogoOrbital } from "../logos/AutoServeLogo";
+import MobileNavBar from "../mobile/MobileNavBar";
 
 const modules: { key: PageKey; label: string; icon: LucideIcon }[] = [
   { key: "dashboard", label: "غرفة التحكم", icon: LayoutGrid },
@@ -76,12 +77,13 @@ export default function StudioShell({ activePage, onNavigate, children }: { acti
           <div className="cockpit-search"><Search size={16} /><input role="combobox" aria-expanded={Boolean(query.trim())} aria-controls="workspace-search-results" aria-autocomplete="list" aria-activedescendant={results.length ? `workspace-result-${searchIndex}` : undefined} aria-label="بحث في العملاء والأوامر والوحدات" placeholder="عميل، سيارة أو رقم أمر…" value={query} onChange={event => setQuery(event.target.value)} onKeyDown={event => { if (event.key === "ArrowDown" || event.key === "ArrowUp") { event.preventDefault(); setSearchIndex(previous => results.length ? (previous + (event.key === "ArrowDown" ? 1 : -1) + results.length) % results.length : 0); } if (event.key === "Enter" && results[searchIndex]) { event.preventDefault(); const result = results[searchIndex]; onNavigate(result.page, result.recordId); setQuery(""); } }} />{query && <button aria-label="مسح البحث" onClick={() => setQuery("")}><X size={14} /></button>}{query.trim() && <div id="workspace-search-results" role="listbox" aria-label="نتائج البحث" className="cockpit-search-results">{results.length ? results.map((result, index) => <button id={`workspace-result-${index}`} role="option" aria-selected={index === searchIndex} key={`${result.label}-${index}`} onClick={() => { onNavigate(result.page, result.recordId); setQuery(""); }}><span>{result.label}<small>{result.sub}</small></span><ArrowUpLeft size={15} /></button>) : <p role="status">لا توجد نتائج مطابقة. جرّب الاسم أو رقم الأمر.</p>}</div>}</div>
         </div>
         {menuOpen && <div className="cockpit-module-menu">{modules.map(({ key, label, icon: Icon }) => <button key={key} onClick={() => { onNavigate(key); setMenuOpen(false); }}><Icon size={19} /><span>{label}</span><ArrowUpLeft size={14} /></button>)}</div>}
-        <main className={`cockpit-content ${activePage !== "dashboard" ? "cockpit-module-content" : ""}`} key={activePage} aria-busy={loading || pending}>
+        <main className={`cockpit-content ${activePage !== "dashboard" ? "cockpit-module-content" : ""} pb-20 md:pb-0`} key={activePage} aria-busy={loading || pending}>
           {dataSource === "api" && <div className="workspace-api-status" role={error ? "alert" : "status"}><span>{loading ? "جاري تحميل مساحة العمل…" : pending ? "جاري حفظ التغييرات…" : error ? error : "البيانات محدثة"}</span>{!loading && !pending && refresh && <button onClick={() => void refresh()}>{error ? "إعادة المحاولة" : "تحديث"}</button>}</div>}
           {activePage !== "dashboard" && <div className="cockpit-module-heading module-breadcrumb"><span>مساحة العمل / {title}</span><button onClick={() => onNavigate("dashboard")}>غرفة التحكم <ArrowUpLeft size={15} /></button></div>}
           {loading ? <div className="workspace-loading" role="status">جاري تحميل وحدات النظام…</div> : <fieldset disabled={pending} className="workspace-content-fieldset">{children}</fieldset>}
         </main>
       </div>
+      <MobileNavBar activePage={activePage} onNavigate={onNavigate} />
     </div>
   );
 }

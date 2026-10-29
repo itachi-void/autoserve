@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Camera, Eye } from "lucide-react";
 import { useAppData } from "../data/AppDataContext";
 import { toArabicNum } from "../utils/format";
 import StatusBadge from "./ui/StatusBadge";
@@ -6,6 +7,7 @@ import Modal from "./ui/Modal";
 import FormField, { inputClass } from "./ui/FormField";
 import PageHeader from "./ui/PageHeader";
 import RecordFormModal from "./ui/RecordFormModal";
+import DamagePhotoModal, { type DamageItem } from "./ui/DamagePhotoModal";
 
 export default function Inspections() {
   const { inspectionTemplates, customInspections, technicians, vehicles, addCustomInspection, addInspectionTemplate, updateInspection } = useAppData();
@@ -13,16 +15,17 @@ export default function Inspections() {
   const [tab, setTab] = useState<"templates" | "custom">("templates");
   const [expanded, setExpanded] = useState<string | null>(null);
   const [showCreate, setShowCreate] = useState(false);
+  const [damageModalInspection, setDamageModalInspection] = useState<typeof customInspections[0] | null>(null);
   const [form, setForm] = useState({ name: "", car: "", tech: "", template: "" });
   const saveInspection = async () => {
     if (!form.name || !form.car || !form.tech || !form.template) return;
     const template = inspectionTemplates.find((item) => item.name === form.template);
-    if ((await addCustomInspection({ id: `INSP-${String(customInspections.length + 1).padStart(3, "0")}`, name: form.name, templateId: template?.apiId, car: form.car, tech: form.tech, date: "٢٧ أغسطس ٢٠٢٦", points: template?.points ?? 0, result: "بانتظار الفحص", status: "مجدول" })) === false) return;
+    if ((await addCustomInspection({ id: `INSP-${String(customInspections.length + 1).padStart(3, "0")}`, name: form.name, templateId: template?.apiId, car: form.car, tech: form.tech, date: "٢٧ أغسطس ٢٠٢٦", points: template?.points ?? 0, result: "بانتظار الفحص", status: "مجدول", damages: [] })) === false) return;
     setForm({ name: "", car: "", tech: "", template: "" }); setShowCreate(false); setTab("custom");
   };
 
   return (
-    <div className="p-6 space-y-6" dir="rtl">
+    <div className="p-3 sm:p-6 space-y-4 sm:space-y-6" dir="rtl">
       <RecordFormModal open={showTemplate} onClose={() => setShowTemplate(false)} title="قالب فحص جديد" fields={[{ name: "name", label: "اسم القالب" }, { name: "type", label: "النوع", defaultValue: "شامل" }, { name: "section", label: "اسم القسم" }, { name: "items", label: "نقاط الفحص (نقطة في كل سطر)", type: "textarea" }]} onSave={values => { const items = values.items.split(/\n|،|,/).map(item => item.trim()).filter(Boolean); return addInspectionTemplate({ id: crypto.randomUUID(), name: values.name, type: values.type, points: items.length, usedCount: 0, sections: [{ name: values.section, items }] }); }} />
       <PageHeader
         title="إدارة الفحوصات"
@@ -104,41 +107,158 @@ export default function Inspections() {
       )}
 
       {tab === "custom" && (
-        <div className="bg-card border border-border rounded-2xl overflow-hidden">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border">
-                {["الرقم", "اسم الفحص", "السيارة", "الفني", "التاريخ", "النقاط", "توقيع العميل", "التلفيات", "النتيجة", "الحالة"].map((h) => (
-                  <th key={h} className="px-4 py-3 text-right text-xs text-muted-foreground font-medium font-mono whitespace-nowrap">{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {customInspections.map((insp) => (
-                <tr key={insp.id} className="border-b border-border/50 hover:bg-secondary/40 transition-colors cursor-pointer">
-                  <td className="px-4 py-3 font-mono text-primary text-xs">{insp.id}</td>
-                  <td className="px-4 py-3 text-foreground font-medium">{insp.name}</td>
-                  <td className="px-4 py-3 text-muted-foreground text-xs">{insp.car}</td>
-                  <td className="px-4 py-3 text-muted-foreground text-xs">{insp.tech}</td>
-                  <td className="px-4 py-3 text-muted-foreground text-xs">{insp.date}</td>
-                  <td className="px-4 py-3 font-mono text-center text-foreground text-xs">{toArabicNum(insp.points)}</td>
-                  <td className="px-4 py-3 text-center">
-                    {insp.customerSignature
-                      ? <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-medium">✓ موقّع</span>
-                      : <span className="text-muted-foreground text-xs">—</span>}
-                  </td>
-                  <td className="px-4 py-3 text-center">
-                    {insp.damages && insp.damages.length > 0
-                      ? <span className="text-[11px] px-2 py-0.5 rounded-full bg-rose-500/15 text-rose-400 border border-rose-500/30 font-medium">{toArabicNum(insp.damages.length)} تلف</span>
-                      : <span className="text-muted-foreground text-xs">—</span>}
-                  </td>
-                  <td className="px-4 py-3"><StatusBadge status={insp.result} /></td>
-                  <td className="px-4 py-3"><select aria-label={`حالة فحص ${insp.name}`} value={insp.status} onChange={event => void updateInspection(insp.id, { status: event.target.value })} className="bg-secondary text-foreground border border-border rounded-lg px-2 py-1 text-xs">{["مجدول", "جاري", "مكتمل"].map(status => <option key={status}>{status}</option>)}</select></td>
+        <>
+          {/* ── Desktop Table View ── */}
+          <div className="hidden md:block bg-card border border-border rounded-2xl overflow-hidden">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border">
+                  {["الرقم", "اسم الفحص", "السيارة", "الفني", "التاريخ", "النقاط", "توقيع العميل", "التلفيات والتوثيق", "النتيجة", "الحالة"].map((h) => (
+                    <th key={h} className="px-4 py-3 text-right text-xs text-muted-foreground font-medium font-mono whitespace-nowrap">{h}</th>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {customInspections.map((insp) => (
+                  <tr key={insp.id} className="border-b border-border/50 hover:bg-secondary/40 transition-colors">
+                    <td className="px-4 py-3 font-mono text-primary text-xs">{insp.id}</td>
+                    <td className="px-4 py-3 text-foreground font-medium">{insp.name}</td>
+                    <td className="px-4 py-3 text-muted-foreground text-xs">{insp.car}</td>
+                    <td className="px-4 py-3 text-muted-foreground text-xs">{insp.tech}</td>
+                    <td className="px-4 py-3 text-muted-foreground text-xs">{insp.date}</td>
+                    <td className="px-4 py-3 font-mono text-center text-foreground text-xs">{toArabicNum(insp.points)}</td>
+                    <td className="px-4 py-3 text-center">
+                      {insp.customerSignature
+                        ? <span className="text-[11px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 font-medium">✓ موقّع</span>
+                        : <span className="text-muted-foreground text-xs">—</span>}
+                    </td>
+                    <td className="px-4 py-3 text-center">
+                      <button
+                        onClick={() => setDamageModalInspection(insp)}
+                        className={`inline-flex items-center gap-1.5 text-[11px] px-2.5 py-1 rounded-full border transition-all ${
+                          insp.damages && insp.damages.length > 0
+                            ? "bg-rose-500/15 text-rose-400 border-rose-500/30 hover:bg-rose-500/25"
+                            : "bg-secondary text-muted-foreground border-border hover:text-foreground"
+                        }`}
+                        title="عرض وتوثيق التلفيات والصور"
+                      >
+                        <Camera size={12} />
+                        {insp.damages && insp.damages.length > 0
+                          ? `${toArabicNum(insp.damages.length)} تلف`
+                          : "+ إضافة"}
+                      </button>
+                    </td>
+                    <td className="px-4 py-3"><StatusBadge status={insp.result} /></td>
+                    <td className="px-4 py-3">
+                      <select
+                        aria-label={`حالة فحص ${insp.name}`}
+                        value={insp.status}
+                        onChange={event => void updateInspection(insp.id, { status: event.target.value })}
+                        className="bg-secondary text-foreground border border-border rounded-lg px-2 py-1 text-xs"
+                      >
+                        {["مجدول", "جاري", "مكتمل"].map(status => <option key={status}>{status}</option>)}
+                      </select>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* ── Mobile Touch Cards View ── */}
+          <div className="md:hidden space-y-3">
+            {customInspections.map((insp) => (
+              <div
+                key={insp.id}
+                className="bg-card border border-border rounded-2xl p-4 space-y-3 shadow-sm hover:border-primary/40 transition-all"
+              >
+                {/* Header Row */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-primary text-xs font-bold">{insp.id}</span>
+                    <StatusBadge status={insp.result} />
+                  </div>
+                  <select
+                    aria-label={`حالة فحص ${insp.name}`}
+                    value={insp.status}
+                    onChange={(e) => void updateInspection(insp.id, { status: e.target.value })}
+                    className="bg-secondary text-foreground border border-border rounded-lg px-2 py-1 text-xs font-medium"
+                  >
+                    {["مجدول", "جاري", "مكتمل"].map((status) => (
+                      <option key={status}>{status}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Title & Vehicle */}
+                <div>
+                  <h4 className="font-bold text-foreground text-sm">{insp.name}</h4>
+                  <p className="text-xs text-primary font-medium mt-0.5">{insp.car}</p>
+                </div>
+
+                {/* Details Grid */}
+                <div className="grid grid-cols-2 gap-2 text-xs bg-secondary/50 rounded-xl p-2.5">
+                  <div>
+                    <span className="text-[10px] text-muted-foreground block">الفني المسؤول:</span>
+                    <span className="font-medium text-foreground">{insp.tech}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-muted-foreground block">التاريخ:</span>
+                    <span className="text-foreground">{insp.date}</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-muted-foreground block">نقاط الفحص:</span>
+                    <span className="font-mono text-foreground font-semibold">{toArabicNum(insp.points)} نقطة</span>
+                  </div>
+                  <div>
+                    <span className="text-[10px] text-muted-foreground block">توقيع العميل:</span>
+                    <span>
+                      {insp.customerSignature ? (
+                        <span className="text-emerald-400 font-medium">✓ موقّع</span>
+                      ) : (
+                        <span className="text-muted-foreground">غير موقّع</span>
+                      )}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Camera / Damage Action Button */}
+                <button
+                  type="button"
+                  onClick={() => setDamageModalInspection(insp)}
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-secondary hover:bg-secondary/80 active:scale-[0.98] text-foreground text-xs font-semibold border border-border transition-all"
+                >
+                  <Camera size={15} className="text-primary" />
+                  <span>
+                    توثيق التلفيات والصور بالكاميرا{" "}
+                    {insp.damages && insp.damages.length > 0 && `(${toArabicNum(insp.damages.length)})`}
+                  </span>
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* ── Damage Photos Modal ── */}
+          {damageModalInspection && (
+            <DamagePhotoModal
+              open={Boolean(damageModalInspection)}
+              onClose={() => setDamageModalInspection(null)}
+              inspectionTitle={damageModalInspection.name}
+              vehicleName={damageModalInspection.car}
+              damages={(damageModalInspection.damages || []) as DamageItem[]}
+              onSaveDamages={(updatedDamages) => {
+                void updateInspection(damageModalInspection.id, {
+                  damages: updatedDamages.map((d) => ({
+                    location: d.location,
+                    note: d.note,
+                    hasPhoto: d.hasPhoto,
+                    photoUrl: d.photoUrl,
+                  })),
+                });
+              }}
+            />
+          )}
+        </>
       )}
 
       <Modal

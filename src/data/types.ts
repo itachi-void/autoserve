@@ -314,6 +314,7 @@ export interface InspectionDamage {
   location: string;
   note: string;
   hasPhoto: boolean; // API: PreExistingDamage + damage photo
+  photoUrl?: string;
 }
 
 export interface CustomInspection extends ApiEntity {

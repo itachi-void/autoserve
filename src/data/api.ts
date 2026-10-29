@@ -1,6 +1,24 @@
-const API_URL = (import.meta.env.VITE_API_URL as string | undefined)?.trim() || "";
+const STORAGE_API_KEY = "autoserve_api_endpoint";
 
-export const API_ENABLED = API_URL.length > 0;
+export function getActiveApiUrl(): string {
+  if (typeof window !== "undefined") {
+    const custom = localStorage.getItem(STORAGE_API_KEY)?.trim();
+    if (custom) return custom;
+  }
+  return (import.meta.env.VITE_API_URL as string | undefined)?.trim() || "";
+}
+
+export function setActiveApiUrl(url: string) {
+  if (typeof window !== "undefined") {
+    if (url.trim()) {
+      localStorage.setItem(STORAGE_API_KEY, url.trim());
+    } else {
+      localStorage.removeItem(STORAGE_API_KEY);
+    }
+  }
+}
+
+export const API_ENABLED = getActiveApiUrl().length > 0;
 
 export class ApiError extends Error {
   constructor(
@@ -18,9 +36,10 @@ export function setAccessToken(token: string | null) {
 }
 
 export async function gql<T>(query: string, variables?: Record<string, unknown>): Promise<T> {
+  const endpoint = getActiveApiUrl();
   let res: Response;
   try {
-    res = await fetch(API_URL, {
+    res = await fetch(endpoint, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,10 +48,10 @@ export async function gql<T>(query: string, variables?: Record<string, unknown>)
       body: JSON.stringify({ query, variables }),
     });
   } catch {
-    const crossOrigin = new URL(API_URL, window.location.href).origin !== window.location.origin;
+    const crossOrigin = new URL(endpoint, window.location.href).origin !== window.location.origin;
     throw new ApiError(
       crossOrigin
-        ? `تعذّر الاتصال بالـ API. تحقق من تشغيل النفق والسماح بعنوان الواجهة في CORS: ${window.location.origin}`
+        ? `تعذّر الاتصال بالـ API (${endpoint}). تحقق من تشغيل الخادم والسماح بعنوان الواجهة في CORS: ${window.location.origin}`
         : "تعذّر الاتصال بالخادم، تحقق من الاتصال وحاول مجدداً",
       "NETWORK",
     );

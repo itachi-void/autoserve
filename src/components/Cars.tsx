@@ -70,19 +70,19 @@ export default function Cars() {
     : [];
 
   return (
-    <div className="p-6 space-y-6" dir="rtl">
+    <div className="p-3 sm:p-6 space-y-4 sm:space-y-6" dir="rtl">
       <PageHeader
         title="إدارة السيارات"
         subtitle={`${toArabicNum(vehicles.length)} سيارة مسجلة`}
         actions={
-          <>
-            <button className="px-4 py-2 bg-secondary text-secondary-foreground rounded-xl text-sm font-medium hover:opacity-80 transition-colors border border-border">
+          <div className="flex items-center gap-2 flex-wrap">
+            <button className="px-3 sm:px-4 py-2 bg-secondary text-secondary-foreground rounded-xl text-xs sm:text-sm font-medium hover:opacity-80 transition-colors border border-border">
               📋 كتالوج السيارات
             </button>
-            <button onClick={() => setShowAdd(true)} className="px-4 py-2 bg-primary text-primary-foreground rounded-xl text-sm font-semibold hover:brightness-110 transition-all">
+            <button onClick={() => setShowAdd(true)} className="px-3 sm:px-4 py-2 bg-primary text-primary-foreground rounded-xl text-xs sm:text-sm font-semibold hover:brightness-110 transition-all">
               + تسجيل سيارة
             </button>
-          </>
+          </div>
         }
       />
 
@@ -96,7 +96,7 @@ export default function Cars() {
           action={search ? undefined : { label: "+ تسجيل سيارة", onClick: () => setShowAdd(true) }}
         />
       )}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filtered.map((car) => (
           <div key={car.vin} className="bg-card border border-border rounded-2xl p-5 hover:border-primary/40 transition-all group cursor-pointer">
             <div className="flex items-start justify-between mb-4">

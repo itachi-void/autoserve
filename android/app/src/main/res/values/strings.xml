@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">AutoServe</string>
+    <string name="title_activity_main">AutoServe</string>
+    <string name="package_name">sa.autoserve.app</string>
+    <string name="custom_url_scheme">sa.autoserve.app</string>
+</resources>

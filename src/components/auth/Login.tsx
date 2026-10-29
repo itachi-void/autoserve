@@ -1,10 +1,11 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowUpLeft, Check, Eye, EyeOff, Fingerprint, Layers3, LoaderCircle, Moon, ShieldCheck, Sun, Wrench } from "lucide-react";
+import { ArrowUpLeft, Check, Eye, EyeOff, Fingerprint, Layers3, LoaderCircle, Moon, Server, ShieldCheck, Sun, Wrench } from "lucide-react";
 import { useAuth } from "../../data/AuthContext";
 import { useTheme } from "../../data/ThemeContext";
 import { API_ENABLED, gql } from "../../data/api";
 import Modal from "../ui/Modal";
 import FormField, { inputClass } from "../ui/FormField";
+import ServerConnectionModal from "../ui/ServerConnectionModal";
 import { LogoOrbital } from "../logos/AutoServeLogo";
 import "./login.css";
 
@@ -18,6 +19,7 @@ export default function Login({ onForgotPassword }: Props) {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showServerModal, setShowServerModal] = useState(false);
   const showAccounts = !API_ENABLED || import.meta.env.DEV;
   const [trialsEnabled, setTrialsEnabled] = useState(false);
   const [trialAvailabilityError, setTrialAvailabilityError] = useState("");
@@ -110,7 +112,16 @@ export default function Login({ onForgotPassword }: Props) {
             {trialsEnabled && <button type="button" disabled={loading} className="w-full border border-border text-foreground rounded-xl px-4 py-3 text-sm font-semibold hover:bg-secondary transition-colors" onClick={() => { setTrialError(""); setShowTrial(true); }}>جديد هنا؟ أنشئ تجربة مستقلة لمركزك</button>}
             {trialAvailabilityError && <div className="login-error" role="alert"><p>{trialAvailabilityError}</p><button type="button" disabled={loading} onClick={() => setTrialCheckAttempt(previous => previous + 1)}>إعادة التحقق من التجربة</button></div>}
             {showAccounts && <div className="login-demo"><div className="login-demo-heading"><span>{API_ENABLED ? "حسابات بيئة التطوير" : "جرّب مساحة العمل"}</span><small>{API_ENABLED ? "تستخدم قاعدة بيانات التطوير" : "بيانات تجريبية، بدون حفظ في الخادم"}</small></div><div className="login-demo-accounts">{[{ email: "admin@fixsys.sa", label: "مدير النظام", pass: "admin123", avatar: "أ" }, { email: "manager@fixsys.sa", label: "مشرف العمليات", pass: "manager123", avatar: "م" }].map(account => <button key={account.email} type="button" disabled={loading} onClick={() => { setEmail(account.email); setPassword(account.pass); setError(""); }}><span>{account.avatar}</span><div>{account.label}<small>تعبئة بيانات الدخول</small></div><ArrowUpLeft size={14} /></button>)}</div></div>}
+            <button
+              type="button"
+              onClick={() => setShowServerModal(true)}
+              className="w-full mt-3 py-2 text-xs text-muted-foreground hover:text-primary transition-colors flex items-center justify-center gap-1.5 border border-dashed border-border rounded-xl"
+            >
+              <Server size={13} />
+              <span>إعدادات ربط الخادم (Backend Settings)</span>
+            </button>
           </div>
+          <ServerConnectionModal open={showServerModal} onClose={() => setShowServerModal(false)} />
           <div className="login-access-caption"><span>BUILT FOR THE WAY YOU WORK.</span><small>تنظيم أقل تعقيداً. أداء أكثر وضوحاً.</small></div>
         </section>
       </main>

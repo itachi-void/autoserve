@@ -38,7 +38,7 @@ export default function WorkOrders({ recordFocus }: { recordFocus?: RecordFocus 
   const activeCount = workOrders.filter((o) => o.status === "جاري" || o.status === "انتظار قطع").length;
 
   return (
-    <div className="p-6 space-y-6" dir="rtl">
+    <div className="p-3 sm:p-6 space-y-4 sm:space-y-6" dir="rtl">
       <PageHeader
         title="أوامر التشغيل"
         subtitle={`${toArabicNum(workOrders.length)} أمر · ${toArabicNum(activeCount)} نشط`}
@@ -51,15 +51,15 @@ export default function WorkOrders({ recordFocus }: { recordFocus?: RecordFocus 
       {focusedId && <div className="record-search-context" role="status"><span>نتيجة البحث: {focusedId}</span><button onClick={() => setFocusedId(null)}>عرض كل الأوامر</button></div>}
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
         {[
           { label: "جاري التنفيذ", status: "جاري", color: "text-sky-400", bg: "bg-sky-500/10" },
           { label: "انتظار قطع غيار", status: "انتظار قطع", color: "text-primary", bg: "bg-primary/10" },
           { label: "مكتملة", status: "مكتمل", color: "text-emerald-400", bg: "bg-emerald-500/10" },
           { label: "مجدولة", status: "مجدول", color: "text-rose-400", bg: "bg-rose-500/10" },
         ].map((s) => (
-          <div key={s.label} className={`${s.bg} border border-border rounded-xl p-4`}>
-            <div className={`text-2xl font-bold font-mono ${s.color}`}>
+          <div key={s.label} className={`${s.bg} border border-border rounded-xl p-3 sm:p-4`}>
+            <div className={`text-xl sm:text-2xl font-bold font-mono ${s.color}`}>
               {toArabicNum(workOrders.filter((o) => o.status === s.status).length)}
             </div>
             <div className="text-xs text-muted-foreground mt-1">{s.label}</div>
@@ -80,9 +80,9 @@ export default function WorkOrders({ recordFocus }: { recordFocus?: RecordFocus 
           />
         )}
         {filtered.map((o) => (
-          <div key={o.id} className="bg-card border border-border rounded-xl p-5 hover:border-primary/40 transition-all cursor-pointer">
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center gap-3 flex-wrap">
+          <div key={o.id} className="bg-card border border-border rounded-xl p-4 sm:p-5 hover:border-primary/40 transition-all cursor-pointer">
+            <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-3">
+              <div className="flex items-center gap-2 flex-wrap">
                 <span className="font-mono text-primary text-sm font-semibold">{o.id}</span>
                 {o.estimateId && <span className="font-mono text-[10px] text-muted-foreground">← {o.estimateId}</span>}
                 <span className={`inline-flex items-center gap-1 text-xs font-semibold ${priorityColors[o.priority]}`}>
@@ -102,16 +102,16 @@ export default function WorkOrders({ recordFocus }: { recordFocus?: RecordFocus 
                   </span>
                 )}
               </div>
-              <div className="text-right">
+              <div className="flex sm:flex-col items-center sm:items-end justify-between sm:justify-start gap-1">
                 <div className="font-mono text-foreground font-semibold">{toArabicNum(o.total)} ر.س</div>
                 <div className="text-xs text-muted-foreground">{o.date}</div>
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mb-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 mb-3 bg-secondary/30 sm:bg-transparent rounded-xl p-3 sm:p-0">
               <div>
                 <div className="text-xs text-muted-foreground/60 mb-0.5">العميل</div>
-                <div className="text-sm text-foreground">{o.customer}</div>
+                <div className="text-sm font-medium text-foreground">{o.customer}</div>
               </div>
               <div>
                 <div className="text-xs text-muted-foreground/60 mb-0.5">السيارة</div>
