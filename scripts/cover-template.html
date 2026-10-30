@@ -2,11 +2,11 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>AutoServe Cover</title>
+  <title>AutoServe - SaaS Cover (1700x970)</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap');
 
-    * {
+    *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -16,55 +16,72 @@
       width: 1700px;
       height: 970px;
       overflow: hidden;
-      background: #07090e;
+      background: #05070c;
       font-family: 'Cairo', sans-serif;
       color: #f1f5f9;
+      position: relative;
       display: flex;
       flex-direction: column;
-      position: relative;
+      user-select: none;
     }
 
-    /* Background glows and grid */
+    /* Ambient Lighting & High-Tech Blueprint Grid */
     .bg-grid {
       position: absolute;
       inset: 0;
       background-image: 
-        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-      mask-image: radial-gradient(ellipse 80% 60% at 50% 30%, #000 60%, transparent 100%);
+        linear-gradient(to right, rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(56, 189, 248, 0.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 90% 70% at 50% 45%, #000 60%, transparent 100%);
+      z-index: 1;
     }
 
-    .glow-1 {
+    .ambient-glow-center {
       position: absolute;
-      top: -150px;
-      right: 15%;
-      width: 650px;
-      height: 650px;
-      background: radial-gradient(circle, rgba(14, 165, 233, 0.22) 0%, rgba(14, 165, 233, 0) 70%);
-      filter: blur(50px);
+      top: 140px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 520px;
+      background: radial-gradient(ellipse, rgba(14, 165, 233, 0.24) 0%, rgba(59, 130, 246, 0.12) 40%, transparent 75%);
+      filter: blur(85px);
+      z-index: 1;
       pointer-events: none;
     }
 
-    .glow-2 {
+    .ambient-glow-left {
       position: absolute;
-      bottom: -150px;
-      left: 10%;
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(circle, rgba(99, 102, 241, 0.18) 0%, rgba(99, 102, 241, 0) 70%);
-      filter: blur(60px);
+      bottom: -60px;
+      left: -40px;
+      width: 620px;
+      height: 620px;
+      background: radial-gradient(circle, rgba(16, 185, 129, 0.16) 0%, transparent 70%);
+      filter: blur(90px);
+      z-index: 1;
       pointer-events: none;
     }
 
-    /* Top Nav Bar */
+    .ambient-glow-right {
+      position: absolute;
+      top: -80px;
+      right: -60px;
+      width: 680px;
+      height: 680px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.20) 0%, transparent 70%);
+      filter: blur(95px);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* Header Nav */
     header {
       position: relative;
-      z-index: 10;
+      z-index: 20;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 36px 70px 0;
+      padding: 30px 80px 10px;
     }
 
     .brand {
@@ -74,68 +91,87 @@
     }
 
     .brand-icon {
-      width: 48px;
-      height: 48px;
-      background: linear-gradient(135deg, #0284c7, #2563eb);
-      border-radius: 14px;
+      width: 52px;
+      height: 52px;
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+      border-radius: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.4);
+      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.45), inset 0 1px 1px rgba(255,255,255,0.4);
+      border: 1px solid rgba(255, 255, 255, 0.18);
     }
 
     .brand-icon svg {
-      width: 26px;
-      height: 26px;
-      color: #fff;
+      width: 28px;
+      height: 28px;
+      color: #ffffff;
     }
 
-    .brand-text {
+    .brand-info {
       display: flex;
       flex-direction: column;
     }
 
-    .brand-title {
+    .brand-name {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 26px;
-      font-weight: 800;
+      font-size: 28px;
+      font-weight: 900;
       letter-spacing: -0.5px;
-      color: #fff;
+      color: #ffffff;
+      line-height: 1;
     }
 
-    .brand-title span {
-      color: #38bdf8;
+    .brand-name span {
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    .brand-tag {
-      font-size: 11px;
+    .brand-sub {
+      font-size: 12px;
       font-weight: 700;
-      letter-spacing: 2px;
+      letter-spacing: 1.5px;
       color: #94a3b8;
+      margin-top: 4px;
       text-transform: uppercase;
     }
 
-    .header-badges {
+    /* Tech Stack Pills */
+    .tech-pills {
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
-    .badge-pill {
-      background: rgba(255, 255, 255, 0.05);
+    .tech-pill {
+      background: rgba(15, 23, 42, 0.8);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
       padding: 8px 18px;
       border-radius: 999px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       color: #cbd5e1;
       display: flex;
       align-items: center;
       gap: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
     }
 
-    .badge-pill .dot {
+    .tech-pill svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .tech-pill.highlight {
+      background: rgba(14, 165, 233, 0.12);
+      border-color: rgba(56, 189, 248, 0.35);
+      color: #38bdf8;
+    }
+
+    .dot-live {
       width: 8px;
       height: 8px;
       border-radius: 50%;
@@ -143,302 +179,467 @@
       box-shadow: 0 0 10px #10b981;
     }
 
-    /* Main Container */
-    main {
+    /* Hero Heading Row (Minimal, high visual authority) */
+    .hero-heading-row {
       position: relative;
-      z-index: 10;
-      flex: 1;
-      display: grid;
-      grid-template-columns: 1.05fr 1.35fr;
-      align-items: center;
-      gap: 40px;
-      padding: 20px 70px 40px;
-    }
-
-    /* Content Area */
-    .content-area {
+      z-index: 20;
+      text-align: center;
+      padding: 10px 80px 0;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      align-items: center;
     }
 
-    .kicker {
+    .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 10px;
-      align-self: flex-start;
-      background: rgba(14, 165, 233, 0.12);
-      border: 1px solid rgba(14, 165, 233, 0.3);
-      padding: 6px 14px;
-      border-radius: 8px;
+      gap: 8px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 6px 20px;
+      border-radius: 999px;
       font-size: 13px;
       font-weight: 700;
       color: #38bdf8;
+      letter-spacing: 0.3px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 20px rgba(14, 165, 233, 0.15);
     }
 
-    h1 {
-      font-size: 46px;
+    .hero-title {
+      font-size: 44px;
       font-weight: 900;
-      line-height: 1.25;
+      line-height: 1.2;
       color: #ffffff;
       letter-spacing: -0.5px;
     }
 
-    h1 span {
-      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+    .hero-title .title-accent {
+      background: linear-gradient(135deg, #38bdf8 0%, #60a5fa 50%, #a78bfa 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      padding: 0 6px;
     }
 
-    p.lead {
-      font-size: 18px;
-      line-height: 1.65;
-      color: #94a3b8;
-      font-weight: 500;
-      max-width: 600px;
-    }
-
-    /* Value Pillars */
-    .pillars {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 8px;
-    }
-
-    .pillar-card {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .pillar-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      background: rgba(56, 189, 248, 0.1);
-      color: #38bdf8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 17px;
-      flex-shrink: 0;
-    }
-
-    .pillar-text h4 {
-      font-size: 14px;
-      font-weight: 700;
-      color: #f8fafc;
-    }
-
-    .pillar-text p {
-      font-size: 12px;
-      color: #64748b;
-      margin-top: 2px;
-    }
-
-    /* Preview Showcase Mockup */
-    .mockup-wrapper {
+    /* 3D Visual Stage (Dominant Visual Content: 85% Canvas) */
+    .stage {
       position: relative;
-      height: 100%;
+      z-index: 10;
+      flex: 1;
+      margin: 15px 70px 0;
+      perspective: 1600px;
       display: flex;
-      align-items: center;
+      align-items: flex-end;
       justify-content: center;
     }
 
-    .mockup-frame {
+    /* Main Centerpiece: Dashboard Window */
+    .main-window {
       position: relative;
-      width: 100%;
+      width: 1080px;
+      height: 615px;
       border-radius: 18px;
-      padding: 9px;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.03));
-      box-shadow: 
-        0 25px 60px -15px rgba(0, 0, 0, 0.7),
-        0 0 50px -10px rgba(14, 165, 233, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      transform: perspective(1200px) rotateY(-5deg) rotateX(2deg);
-      transition: transform 0.3s ease;
-    }
-
-    .mockup-inner {
-      border-radius: 12px;
-      overflow: hidden;
       background: #090d16;
-      border: 1px solid rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 
+        0 40px 95px -15px rgba(0, 0, 0, 0.88),
+        0 0 70px -10px rgba(14, 165, 233, 0.28),
+        inset 0 1px 1px rgba(255, 255, 255, 0.18);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(20px);
+      z-index: 5;
     }
 
-    .mockup-topbar {
-      height: 28px;
-      background: #0d121f;
+    .window-header {
+      height: 38px;
+      background: #0c111e;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       align-items: center;
-      padding: 0 14px;
-      gap: 7px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      justify-content: space-between;
+      padding: 0 16px;
+      flex-shrink: 0;
+      direction: ltr;
     }
 
-    .mockup-dot {
-      width: 9px;
-      height: 9px;
+    .window-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
       border-radius: 50%;
     }
-    .dot-red { background: #ef4444; }
-    .dot-yellow { background: #f59e0b; }
-    .dot-green { background: #10b981; }
+    .dot-close { background: #ef4444; }
+    .dot-min { background: #f59e0b; }
+    .dot-max { background: #10b981; }
 
-    .mockup-img {
+    .window-url-bar {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      padding: 4px 22px;
+      border-radius: 7px;
+      font-size: 11px;
+      color: #94a3b8;
+      font-family: 'Plus Jakarta Sans', monospace;
+      letter-spacing: 0.3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .window-url-bar span {
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .window-body {
+      flex: 1;
+      overflow: hidden;
+      position: relative;
+      background: #090d16;
+    }
+
+    .window-body img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    /* Left Floating 3D Showcase: Work Orders Card */
+    .floating-card-left {
+      position: absolute;
+      left: 0px;
+      bottom: 50px;
+      width: 380px;
+      height: 485px;
+      border-radius: 16px;
+      background: #0d1322;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      box-shadow: 
+        -25px 35px 65px rgba(0, 0, 0, 0.8),
+        0 0 45px rgba(14, 165, 233, 0.2);
+      overflow: hidden;
+      transform: rotateY(18deg) rotateX(4deg) translateZ(50px);
+      z-index: 12;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .floating-card-header {
+      height: 38px;
+      background: rgba(15, 23, 42, 0.95);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #f1f5f9;
+    }
+
+    .card-tag {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      background: rgba(16, 185, 129, 0.16);
+      color: #34d399;
+      font-weight: 700;
+    }
+
+    .floating-card-body {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .floating-card-body img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top right;
+      display: block;
+    }
+
+    /* Right Floating Showcase: Inspections & Diagnostics */
+    .floating-card-right {
+      position: absolute;
+      right: 0px;
+      bottom: 50px;
+      width: 390px;
+      height: 485px;
+      border-radius: 16px;
+      background: #0d1322;
+      border: 1px solid rgba(99, 102, 241, 0.32);
+      box-shadow: 
+        25px 35px 65px rgba(0, 0, 0, 0.8),
+        0 0 45px rgba(99, 102, 241, 0.22);
+      overflow: hidden;
+      transform: rotateY(-18deg) rotateX(4deg) translateZ(50px);
+      z-index: 12;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .floating-card-right .floating-card-body img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top right;
+      display: block;
+    }
+
+    /* Floating Studio Vehicle Overlap (High Automotive Punch) */
+    .studio-car-wrap {
+      position: absolute;
+      right: -25px;
+      bottom: -15px;
+      width: 520px;
+      z-index: 18;
+      pointer-events: none;
+      filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.9));
+    }
+
+    .studio-car-wrap img {
       width: 100%;
       height: auto;
       display: block;
-      object-fit: cover;
-      max-height: 570px;
     }
 
-    /* Floating floating tag */
-    .floating-card {
+    /* Floating Telegram Bot Live Action Badge */
+    .badge-hud-telegram {
       position: absolute;
-      bottom: 25px;
-      right: -20px;
-      background: rgba(15, 23, 42, 0.88);
-      border: 1px solid rgba(56, 189, 248, 0.3);
+      bottom: 35px;
+      left: 310px;
+      z-index: 25;
+      background: rgba(13, 20, 36, 0.92);
+      border: 1px solid rgba(56, 189, 248, 0.42);
       backdrop-filter: blur(16px);
-      padding: 12px 20px;
+      padding: 10px 18px;
       border-radius: 14px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.65);
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .floating-card-icon {
-      width: 40px;
-      height: 40px;
+    .hud-icon-tg {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #0284c7, #38bdf8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.4);
+    }
+
+    .hud-icon-tg svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .hud-text strong {
+      display: block;
+      font-size: 13px;
+      color: #f8fafc;
+      font-weight: 700;
+    }
+
+    .hud-text span {
+      display: block;
+      font-size: 11px;
+      color: #94a3b8;
+    }
+
+    /* Floating Operations KPI Badge */
+    .badge-hud-metrics {
+      position: absolute;
+      top: 55px;
+      right: 170px;
+      z-index: 25;
+      background: rgba(13, 20, 36, 0.90);
+      border: 1px solid rgba(16, 185, 129, 0.38);
+      backdrop-filter: blur(16px);
+      padding: 10px 18px;
+      border-radius: 14px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.65);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hud-icon-green {
+      width: 36px;
+      height: 36px;
       border-radius: 10px;
       background: linear-gradient(135deg, #10b981, #059669);
       display: flex;
       align-items: center;
       justify-content: center;
       color: white;
-      font-size: 18px;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
     }
 
-    .floating-card-text span {
-      display: block;
-      font-size: 11px;
-      color: #94a3b8;
+    .hud-icon-green svg {
+      width: 18px;
+      height: 18px;
     }
 
-    .floating-card-text strong {
-      display: block;
-      font-size: 15px;
-      color: #f1f5f9;
-      font-weight: 700;
+    /* Bottom Gradient Fade for depth */
+    .bottom-fade {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: linear-gradient(to top, #05070c 0%, transparent 100%);
+      z-index: 15;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <div class="bg-grid"></div>
-  <div class="glow-1"></div>
-  <div class="glow-2"></div>
 
+  <!-- Ambient Light & Blueprint Grid -->
+  <div class="bg-grid"></div>
+  <div class="ambient-glow-center"></div>
+  <div class="ambient-glow-left"></div>
+  <div class="ambient-glow-right"></div>
+
+  <!-- Header -->
   <header>
     <div class="brand">
       <div class="brand-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
           <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
         </svg>
       </div>
-      <div class="brand-text">
-        <div class="brand-title">Auto<span>Serve</span></div>
-        <div class="brand-tag">Workshop Cloud OS</div>
+      <div class="brand-info">
+        <div class="brand-name">Auto<span>Serve</span></div>
+        <div class="brand-sub">Workshop Cloud OS</div>
       </div>
     </div>
 
-    <div class="header-badges">
-      <div class="badge-pill">
-        <div class="dot"></div>
-        <span>نظام سحابي متكامل ومُجرّب</span>
+    <!-- Tech Stack Pills -->
+    <div class="tech-pills">
+      <div class="tech-pill highlight">
+        <div class="dot-live"></div>
+        <span>React 19 &amp; Vite</span>
       </div>
-      <div class="badge-pill">
-        <span>جاهز للتشغيل الفوري</span>
+      <div class="tech-pill">
+        <span>.NET 10 &amp; PostgreSQL</span>
+      </div>
+      <div class="tech-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+        <span>Telegram Bot</span>
       </div>
     </div>
   </header>
 
-  <main>
-    <div class="content-area">
-      <div class="kicker">
-        <span>⚡ المنصة التشغيلية لمراكز صيانة السيارات</span>
+  <!-- Minimal Headline (Zero paragraph clutter) -->
+  <div class="hero-heading-row">
+    <div class="hero-badge">
+      <span>⚡ بيئة التشغيل السحابية الذكية لإدارة الورش ومراكز الصيانة</span>
+    </div>
+    <h1 class="hero-title">
+      نظام <span class="title-accent">AutoServe</span> المتكامل لصيانة المركبات
+    </h1>
+  </div>
+
+  <!-- 3D Multi-Layered Visual Stage (85% Visual Content) -->
+  <div class="stage">
+    
+    <!-- Left Angled Card: Work Orders / أوامر التشغيل -->
+    <div class="floating-card-left">
+      <div class="floating-card-header">
+        <span>أوامر التشغيل والصيانة</span>
+        <span class="card-tag">مباشر • فوري</span>
       </div>
-
-      <h1>
-        أدِر مركز صيانتك<br>
-        <span>بذكاء وسرعة فائقة</span>
-      </h1>
-
-      <p class="lead">
-        من استقبال السيارة والفحص التشخيصي حتى أمر التشغيل والفوترة وإدارة المخزون؛ تجربة رقمية موحدة ترفع الإنتاجية وتمنع الهدر المالي.
-      </p>
-
-      <div class="pillars">
-        <div class="pillar-card">
-          <div class="pillar-icon">🛠️</div>
-          <div class="pillar-text">
-            <h4>أوامر التشغيل والفحص</h4>
-            <p>متابعة دقيقة لمراحل الصيانة</p>
-          </div>
-        </div>
-
-        <div class="pillar-card">
-          <div class="pillar-icon">📦</div>
-          <div class="pillar-text">
-            <h4>المستودع وقطع الغيار</h4>
-            <p>تنبيهات النواقص وتكلفة القطع</p>
-          </div>
-        </div>
-
-        <div class="pillar-card">
-          <div class="pillar-icon">🧾</div>
-          <div class="pillar-text">
-            <h4>الفواتير وعروض الأسعار</h4>
-            <p>تحصيل سلس وتقارير لحظية</p>
-          </div>
-        </div>
-
-        <div class="pillar-card">
-          <div class="pillar-icon">👥</div>
-          <div class="pillar-text">
-            <h4>العملاء والمركبات</h4>
-            <p>سجل صيانة رقمي متكامل</p>
-          </div>
-        </div>
+      <div class="floating-card-body">
+        <img src="../public/portfolio/02-work-orders.png" alt="أوامر التشغيل">
       </div>
     </div>
 
-    <div class="mockup-wrapper">
-      <div class="mockup-frame">
-        <div class="mockup-inner">
-          <div class="mockup-topbar">
-            <div class="mockup-dot dot-red"></div>
-            <div class="mockup-dot dot-yellow"></div>
-            <div class="mockup-dot dot-green"></div>
-          </div>
-          <img src="../public/portfolio/01-dashboard.png" class="mockup-img" alt="واجهة لوحة التحكم الحقيقية">
+    <!-- Centerpiece: Main High-Res Dashboard Window -->
+    <div class="main-window">
+      <div class="window-header">
+        <div class="window-dots">
+          <div class="dot dot-close"></div>
+          <div class="dot dot-min"></div>
+          <div class="dot dot-max"></div>
         </div>
+        <div class="window-url-bar">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          <span>autoserve.app</span>/dashboard
+        </div>
+        <div style="width: 45px;"></div>
       </div>
-
-      <div class="floating-card">
-        <div class="floating-card-icon">✓</div>
-        <div class="floating-card-text">
-          <span>دقة العمليات التشغيلية</span>
-          <strong>كفاءة تشغيلية 100%</strong>
-        </div>
+      <div class="window-body">
+        <img src="../public/portfolio/01-dashboard.png" alt="لوحة التحكم الرئيسية">
       </div>
     </div>
-  </main>
+
+    <!-- Right Angled Card: Inspections & Diagnostics -->
+    <div class="floating-card-right">
+      <div class="floating-card-header">
+        <span>الفحص الفني الشامل</span>
+        <span class="card-tag" style="background: rgba(99,102,241,0.18); color: #818cf8;">تقارير ذكية</span>
+      </div>
+      <div class="floating-card-body">
+        <img src="../public/portfolio/04-inspections.png" alt="الفحص الفني">
+      </div>
+    </div>
+
+    <!-- Floating Studio Vehicle (Adds Automotive Identity) -->
+    <div class="studio-car-wrap">
+      <img src="../public/images/studio-vehicle.webp" alt="مركبة فحص فني">
+    </div>
+
+    <!-- Floating Telegram Live Bot Badge -->
+    <div class="badge-hud-telegram">
+      <div class="hud-icon-tg">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69a.2.2 0 00-.05-.18c-.06-.05-.14-.03-.21-.02-.09.02-1.49.95-4.22 2.79-.4.27-.76.41-1.08.4-.36-.01-1.04-.2-1.55-.37-.63-.2-1.12-.31-1.08-.66.02-.18.27-.36.74-.55 2.92-1.27 4.86-2.11 5.83-2.51 2.78-1.16 3.35-1.36 3.73-1.36.08 0 .27.02.39.12.1.08.13.19.14.27-.01.06.01.24 0 .37z"/>
+        </svg>
+      </div>
+      <div class="hud-text">
+        <strong>ربط وتنبيهات Telegram Bot</strong>
+        <span>اعتماد عروض الأسعار وتحديث أوامر العمل لحظياً</span>
+      </div>
+    </div>
+
+    <!-- Floating Operations KPI Badge -->
+    <div class="badge-hud-metrics">
+      <div class="hud-icon-green">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <div class="hud-text">
+        <strong style="color: #34d399;">كفاءة تشغيلية 100%</strong>
+        <span>فواتير ضريبية، مخزون، وفحص متكامل</span>
+      </div>
+    </div>
+
+    <div class="bottom-fade"></div>
+  </div>
+
 </body>
 </html>
