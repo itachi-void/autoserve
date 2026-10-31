@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  cargopulse-db:
+    image: postgres:16-alpine
+    container_name: cargopulse_postgres
+    restart: always
+    environment:
+      POSTGRES_DB: cargopulse_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Password123!
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  cargopulse-redis:
+    image: redis:7-alpine
+    container_name: cargopulse_redis
+    restart: always
+    ports:
+      - "6380:6379"
+
+  cargopulse-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cargopulse_api
+    restart: always
+    ports:
+      - "5050:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Host=cargopulse-db;Port=5432;Database=cargopulse_db;Username=postgres;Password=Password123!
+      - Jwt__Secret=CargoPulse_Super_Production_Secret_Key_98234789234879234_ABC
+    depends_on:
+      - cargopulse-db
+      - cargopulse-redis
+
+volumes:
+  postgres_data:
