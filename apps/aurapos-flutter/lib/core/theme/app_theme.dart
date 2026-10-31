@@ -34,7 +34,7 @@ class AppTheme {
         background: darkBackground,
         error: coralAccent,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: darkCard,
         elevation: 0,
         shape: RoundedRectangleBorder(
@@ -66,7 +66,7 @@ class AppTheme {
         background: lightBackground,
         error: coralAccent,
       ),
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         color: lightCard,
         elevation: 1,
         shape: RoundedRectangleBorder(
